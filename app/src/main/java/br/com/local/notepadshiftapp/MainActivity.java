@@ -1,9 +1,11 @@
 package br.com.local.notepadshiftapp;
 
+import android.app.ProgressDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.facebook.stetho.Stetho;
@@ -51,7 +53,12 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void pesquisar(View v) {
+
+
         NotaAPI api = getRetrofit().create(NotaAPI.class);
+
+
+
         api.buscarNota(etTitulo.getText().toString())
                 .enqueue(new Callback<Nota>() {
                     @Override
@@ -66,8 +73,35 @@ public class MainActivity extends AppCompatActivity {
                     }
                 });
     }
+    public void limpar(View v){
+        etTitulo.setText("");
+        etTexto.setText("");
+
+    }
 
     public void salvar(View v) {
-        
+        final ProgressDialog dialog = ProgressDialog.show(MainActivity.this,"",
+                "Aguarde! Estamos gravando seus dados",true);
+        dialog.show();
+
+        NotaAPI api = getRetrofit().create(NotaAPI.class);
+
+        Nota nota = new Nota(etTitulo.getText().toString(), etTexto.getText().toString());
+
+        api.buscarNota(etTitulo.getText().toString())
+                .enqueue(new Callback<Nota>() {
+                    @Override
+                    public void onResponse(Call<Nota> call, Response<Nota> response) {
+                        Toast.makeText(MainActivity.this, "Dado gravado com sucesso! ", Toast.LENGTH_LONG).show();
+                        dialog.dismiss();
+                    }
+
+                    @Override
+                    public void onFailure(Call<Nota> call, Throwable t) {
+                        dialog.dismiss();
+                        Toast.makeText(MainActivity.this, "Ops! Problem na gravação ", Toast.LENGTH_LONG).show();
+
+                    }
+                });
     }
 }
