@@ -17,6 +17,7 @@ import retrofit2.Callback;
 import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
+import retrofit2.http.POST;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -55,18 +56,18 @@ public class MainActivity extends AppCompatActivity {
                 .enqueue(new Callback<Nota>() {
                     @Override
                     public void onResponse(Call<Nota> call, Response<Nota> response) {
+                       if(response.isSuccessful()){
                         etTexto.setText(response.body().getDescricao());
-                    }
+                    }}
 
                     @Override
                     public void onFailure(Call<Nota> call, Throwable t) {
                         Toast.makeText(MainActivity.this, "Ops! ", Toast.LENGTH_LONG).show();
                     }
                 });
-
-
     }
 
     public void salvar(View v) {
+        
     }
 }

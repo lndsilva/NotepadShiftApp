@@ -12,7 +12,7 @@ import retrofit2.http.Path;
 
 public interface NotaAPI {
 
-    @GET("/nota/titulo/(titulo)")
+    @GET("/nota/titulo/{titulo}")
     Call<Nota> buscarNota(@Path(value = "titulo") String titulo);
 
     @POST("/nota")
